@@ -98,7 +98,7 @@ export default function ListView(props: ListViewProps) {
             <div className="inline">
               <GoPlus size={20} />
             </div>
-            <div>Tạo mới</div>
+            <div className="hidden md:flex">Tạo mới</div>
           </button>
         ) : (
           view === View.USER && (
@@ -111,7 +111,7 @@ export default function ListView(props: ListViewProps) {
               <div className="inline">
                 <GoPlus size={20} />
               </div>
-              <div>Tạo mới</div>
+              <div className="hidden md:flex">Tạo mới</div>
             </button>
           )
         )}

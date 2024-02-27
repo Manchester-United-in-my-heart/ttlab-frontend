@@ -29,7 +29,7 @@ export const SideBar = (props: Props) => {
     );
   else
     return (
-      <div className="bg-white pt-[10px] px-2">
+      <div className="flex flex-col bg-white pt-[10px] px-2">
         <div className="flex justify-between">
           <svg width="148" height="24" viewBox="0 0 148 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M49.6513 7.50323H46.7216V17.7018H45.1362V7.50323H42.2203V6.29565H49.6513V7.50323Z" fill="black" />

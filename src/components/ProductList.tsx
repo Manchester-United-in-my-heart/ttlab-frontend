@@ -39,7 +39,7 @@ export default function ProductList(props: ProductListProps) {
   }
 
   return (
-    <div className="w-full">
+    <>
       {
         // Product Modal
         props.isProductModalOpen && (
@@ -50,106 +50,216 @@ export default function ProductList(props: ProductListProps) {
           </div>
         )
       }
-      <div className="grid grid-cols-[2fr_2fr_5fr_2fr_3fr_2fr]">
-        <div className="text-[#8B909A]">TÊN SẢN PHẨM</div>
-        <div className="text-[#8B909A]">GIÁ</div>
-        <div className="text-[#8B909A]">SỐ LƯỢNG</div>
-        <div className="text-[#8B909A]">MÔ TẢ</div>
-        <div className="text-[#8B909A]">ẢNH</div>
-        <div className="text-[#8B909A]">HÀNH ĐỘNG</div>
-      </div>
-      <hr />
-
-      {productListByPage &&
-        productListByPage.length > 0 &&
-        productListByPage[currentPage].map((product) => (
-          <div className="w-full" key={product.id}>
-            <div className="grid grid-cols-[2fr_2fr_5fr_2fr_3fr_2fr] py-3">
-              <div className="font-semibold">{product.name}</div>
-              <div>{product.price}</div>
-              <div>{product.quantity}</div>
-              <div>{product.description}</div>
-              <div>
-                <img src={product.image} alt="" className="w-10 h-10" />
+      {/* Small  */}
+      <div className="flex flex-col w-full md:hidden">
+        <div className="grid grid-cols-[1fr_1fr_1fr]">
+          <div className="text-[#8B909A]">TÊN SẢN PHẨM</div>
+          <div className="text-[#8B909A]">ẢNH</div>
+          <div className="text-[#8B909A]">HÀNH ĐỘNG</div>
+        </div>
+        <hr />
+        {productListByPage &&
+          productListByPage.length > 0 &&
+          productListByPage[currentPage].map((product) => (
+            <div className="w-full" key={product.id}>
+              <div className="grid grid-cols-[1fr_1fr_1fr] py-3">
+                <div className="font-semibold">{product.name}</div>
+                <div>
+                  <img src={product.image} alt="" className="w-10 h-10" />
+                </div>
+                <div>
+                  <button
+                    className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
+                    onClick={() => {
+                      props.setIsProductModalOpen(true);
+                      setSelectedProduct(product);
+                    }}
+                  >
+                    <SlNote />
+                  </button>
+                  <button
+                    className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
+                    onClick={() => {
+                      onDeleteProduct(product);
+                    }}
+                  >
+                    <BiTrash />
+                  </button>
+                </div>
               </div>
-              <div>
-                <button
-                  className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
-                  onClick={() => {
-                    console.log(`modify product ${product.id}`);
-                    props.setIsProductModalOpen(true);
-                    setSelectedProduct(product);
-                  }}
-                >
-                  <SlNote />
-                </button>
-                <button
-                  className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
-                  onClick={() => {
-                    // console.log('delete product');
-                    onDeleteProduct(product);
-                  }}
-                >
-                  <BiTrash />
-                </button>
-              </div>
+              <hr />
             </div>
-            <hr />
-          </div>
-        ))}
+          ))}
 
-      <div>
-        <div className="flex justify-between">
-          <div>
-            Showing{' '}
-            <select
-              className="px-2 py-1 rounded-md shadow-none"
-              onChange={(e) => {
-                setNumberOfProductPerPage(parseInt(e.target.value));
-              }}
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>{' '}
-            of {products.length}
-          </div>
-
-          <div className="flex justify-center gap-[3px]">
-            <button
-              className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
-              onClick={() => {
-                if (currentPage > 0) {
-                  setCurrentPage(currentPage - 1);
-                }
-              }}
-            >
-              <GrPrevious />
-            </button>
-            {Array.from(Array(pages).keys()).map((page) => (
-              <button
-                className={`px-2 py-1 shadow-none ${currentPage === page ? 'font-bold bg-blue-600 text-white' : 'bg-[#F1F2F6] text-[#8B909A] '}`}
-                key={page}
-                onClick={() => {
-                  setCurrentPage(page);
+        <div>
+          <div className="flex justify-between">
+            <div>
+              Showing{' '}
+              <select
+                className="px-2 py-1 rounded-md shadow-none"
+                onChange={(e) => {
+                  setNumberOfProductPerPage(parseInt(e.target.value));
                 }}
               >
-                {page + 1}
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>{' '}
+              of {products.length}
+            </div>
+
+            <div className="flex justify-center gap-[3px]">
+              <button
+                className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
+                onClick={() => {
+                  if (currentPage > 0) {
+                    setCurrentPage(currentPage - 1);
+                  }
+                }}
+              >
+                <GrPrevious />
               </button>
-            ))}
-            <button
-              className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
-              onClick={() => {
-                if (currentPage < pages - 1) {
-                  setCurrentPage(currentPage + 1);
-                }
-              }}
-            >
-              <MdNavigateNext />
-            </button>
+              {Array.from(Array(pages).keys()).length > 5 ? (
+                <button className="px-2 py-1 bg-blue-600 text-white shadow-none" key={currentPage}>
+                  {' '}
+                  {currentPage + 1}
+                </button>
+              ) : (
+                Array.from(Array(pages).keys()).map((page) => (
+                  <button
+                    className={`px-2 py-1 shadow-none ${currentPage === page ? 'font-bold bg-blue-600 text-white' : 'bg-[#F1F2F6] text-[#8B909A] '}`}
+                    key={page}
+                    onClick={() => {
+                      setCurrentPage(page);
+                    }}
+                  >
+                    {page + 1}
+                  </button>
+                ))
+              )}
+              <button
+                className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
+                onClick={() => {
+                  if (currentPage < pages - 1) {
+                    setCurrentPage(currentPage + 1);
+                  }
+                }}
+              >
+                <MdNavigateNext />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Medium */}
+      <div className="hidden md:full md:flex md:flex-col">
+        <div className="grid grid-cols-[2fr_2fr_5fr_2fr_3fr_2fr]">
+          <div className="text-[#8B909A]">TÊN SẢN PHẨM</div>
+          <div className="text-[#8B909A]">GIÁ</div>
+          <div className="text-[#8B909A]">SỐ LƯỢNG</div>
+          <div className="text-[#8B909A]">MÔ TẢ</div>
+          <div className="text-[#8B909A]">ẢNH</div>
+          <div className="text-[#8B909A]">HÀNH ĐỘNG</div>
+        </div>
+        <hr />
+
+        {productListByPage &&
+          productListByPage.length > 0 &&
+          productListByPage[currentPage].map((product) => (
+            <div className="w-full" key={product.id}>
+              <div className="grid grid-cols-[2fr_2fr_5fr_2fr_3fr_2fr] py-3">
+                <div className="font-semibold">{product.name}</div>
+                <div>{product.price}</div>
+                <div>{product.quantity}</div>
+                <div>{product.description}</div>
+                <div>
+                  <img src={product.image} alt="" className="w-10 h-10" />
+                </div>
+                <div>
+                  <button
+                    className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
+                    onClick={() => {
+                      props.setIsProductModalOpen(true);
+                      setSelectedProduct(product);
+                    }}
+                  >
+                    <SlNote />
+                  </button>
+                  <button
+                    className="px-2 py-1 text-xl text-[#8B909A] rounded-md shadow-none"
+                    onClick={() => {
+                      onDeleteProduct(product);
+                    }}
+                  >
+                    <BiTrash />
+                  </button>
+                </div>
+              </div>
+              <hr />
+            </div>
+          ))}
+
+        <div>
+          <div className="flex justify-between">
+            <div>
+              Showing{' '}
+              <select
+                className="px-2 py-1 rounded-md shadow-none"
+                onChange={(e) => {
+                  setNumberOfProductPerPage(parseInt(e.target.value));
+                }}
+              >
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>{' '}
+              of {products.length}
+            </div>
+
+            <div className="flex justify-center gap-[3px]">
+              <button
+                className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
+                onClick={() => {
+                  if (currentPage > 0) {
+                    setCurrentPage(currentPage - 1);
+                  }
+                }}
+              >
+                <GrPrevious />
+              </button>
+              {Array.from(Array(pages).keys()).length > 5 ? (
+                <button className="px-2 py-1 bg-blue-600 text-white shadow-none" key={currentPage}>
+                  {' '}
+                  {currentPage + 1}
+                </button>
+              ) : (
+                Array.from(Array(pages).keys()).map((page) => (
+                  <button
+                    className={`px-2 py-1 shadow-none ${currentPage === page ? 'font-bold bg-blue-600 text-white' : 'bg-[#F1F2F6] text-[#8B909A] '}`}
+                    key={page}
+                    onClick={() => {
+                      setCurrentPage(page);
+                    }}
+                  >
+                    {page + 1}
+                  </button>
+                ))
+              )}
+              <button
+                className="px-2 py-1 bg-[#F1F2F6] text-[#8B909A] shadow-none"
+                onClick={() => {
+                  if (currentPage < pages - 1) {
+                    setCurrentPage(currentPage + 1);
+                  }
+                }}
+              >
+                <MdNavigateNext />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
