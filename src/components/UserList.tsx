@@ -4,7 +4,7 @@ import { GrPrevious } from 'react-icons/gr';
 import { BiTrash } from 'react-icons/bi';
 import UserModal from '../modals/UserModal';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 export class Phone {
   number: string;
   constructor(number: string) {
@@ -37,13 +37,28 @@ export default function UserList(props: UserListProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const pages = Math.ceil(users.length / numberOfUserPerPage);
 
-  const userListByPage = [];
-
+  let dummyUserListByPage: any[] = [];
   for (let i = 0; i < pages; i++) {
-    userListByPage.push(users.slice(i * numberOfUserPerPage, (i + 1) * numberOfUserPerPage));
+    dummyUserListByPage.push(users.slice(i * numberOfUserPerPage, (i + 1) * numberOfUserPerPage));
   }
+  
+  const [userListByPage, setUserListByPage] = useState<any[]>([]);
+  
+  useEffect(() => {
+    setCurrentPage(0);
+    setUserListByPage(dummyUserListByPage);
+  }, [users]);
 
   const [selectedUser, setSelectedUser] = useState<User | undefined>(undefined);
+
+  useEffect(() => {
+    setCurrentPage(0);
+    let dummyUserListByPage: any[] = [];
+    for (let i = 0; i < pages; i++) {
+      dummyUserListByPage.push(users.slice(i * numberOfUserPerPage, (i + 1) * numberOfUserPerPage));
+    }
+    setUserListByPage(dummyUserListByPage);
+  }, [numberOfUserPerPage]);
 
   // split users into pages
 
@@ -130,7 +145,7 @@ export default function UserList(props: UserListProps) {
             >
               <GrPrevious />
             </button>
-              {Array.from(Array(pages).keys()).length > 5 ? (
+            {Array.from(Array(pages).keys()).length > 5 ? (
               <button className="px-2 py-1 bg-blue-600 text-white shadow-none" key={currentPage}>
                 {currentPage + 1}
               </button>

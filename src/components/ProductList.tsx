@@ -2,7 +2,7 @@ import { SlNote } from 'react-icons/sl';
 import { MdNavigateNext } from 'react-icons/md';
 import { GrPrevious } from 'react-icons/gr';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BiTrash } from 'react-icons/bi';
 import ProductModal from '../modals/ProductModal';
 
@@ -33,10 +33,26 @@ export default function ProductList(props: ProductListProps) {
 
   const [currentPage, setCurrentPage] = useState(0);
   const pages = Math.ceil(products.length / numberOfProductPerPage);
-  const productListByPage = [];
+  let dummyProductListByPage: any[] = [];
   for (let i = 0; i < pages; i++) {
-    productListByPage.push(products.slice(i * numberOfProductPerPage, (i + 1) * numberOfProductPerPage));
+    dummyProductListByPage.push(products.slice(i * numberOfProductPerPage, (i + 1) * numberOfProductPerPage));
   }
+
+  const [productListByPage, setProductListByPage] = useState<Product[]>([]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+    setProductListByPage(dummyProductListByPage);
+  }, [products]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+    dummyProductListByPage = [];
+    for (let i = 0; i < pages; i++) {
+      dummyProductListByPage.push(products.slice(i * numberOfProductPerPage, (i + 1) * numberOfProductPerPage));
+    }
+    setProductListByPage(dummyProductListByPage);
+  }, [numberOfProductPerPage]);
 
   return (
     <>
