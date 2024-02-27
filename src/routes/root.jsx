@@ -98,9 +98,9 @@ export default function Root() {
   }, []);
 
   const onCreateUser = async (user) => {
-    const newUserList = [...dummyUserList, user];
-    setDummyUserList(newUserList);
-    setFilteredUserList(newUserList);
+    // const newUserList = [...dummyUserList, user];
+    // setDummyUserList(newUserList);
+    // setFilteredUserList(newUserList);
 
     // send data to server
     await fetch(`${host}/users`, {
@@ -118,12 +118,15 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
+    
+    // reload page to get new data
+    window.location.reload();
   };
 
   const onCreateProduct = async (product) => {
-    const newProductList = [...dummyProductList, product];
-    setDummyProductList(newProductList);
-    setFilteredProductList(newProductList);
+    // const newProductList = [...dummyProductList, product];
+    // setDummyProductList(newProductList);
+    // setFilteredProductList(newProductList);
 
     // send data to server
     await fetch(`${host}/products`, {
@@ -141,14 +144,17 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
+
+    // reload page to get new data
+    window.location.reload();
   };
 
   const onModifyProduct = async (product) => {
-    const index = dummyProductList.findIndex((p) => p.id === product.id);
-    const newProductList = [...dummyProductList];
-    newProductList[index] = product;
-    setDummyProductList(newProductList);
-    setFilteredProductList(newProductList);
+    // const index = dummyProductList.findIndex((p) => p.id === product.id);
+    // const newProductList = [...dummyProductList];
+    // newProductList[index] = product;
+    // setDummyProductList(newProductList);
+    // setFilteredProductList(newProductList);
 
     setIsLoading(true);
     // send data to server
@@ -168,12 +174,15 @@ export default function Root() {
       },
     });
     setIsLoading(false);
+    
+    // reload page to get new data
+    window.location.reload();
   };
 
   const onDeleteProduct = async (product) => {
-    const newProductList = dummyProductList.filter((p) => p.id !== product.id);
-    setDummyProductList(newProductList);
-    setFilteredProductList(newProductList);
+    // const newProductList = dummyProductList.filter((p) => p.id !== product.id);
+    // setDummyProductList(newProductList);
+    // setFilteredProductList(newProductList);
 
     // // send data to server
     setIsLoading(true);
@@ -186,6 +195,9 @@ export default function Root() {
       },
     });
     setIsLoading(false);
+
+    // reload page to get new data
+    window.location.reload();
   };
 
   const onModifyUser = async (user) => {
@@ -213,12 +225,15 @@ export default function Root() {
       },
     });
     setIsLoading(false);
+
+    // reload page to get new data
+    window.location.reload();
   };
 
   const onDeleteUser = async (user) => {
-    const newUserList = dummyUserList.filter((u) => u.id !== user.id);
-    setDummyUserList(newUserList);
-    setFilteredUserList(newUserList);
+    // const newUserList = dummyUserList.filter((u) => u.id !== user.id);
+    // setDummyUserList(newUserList);
+    // setFilteredUserList(newUserList);
 
     // // send data to server
     setIsLoading(true);
@@ -231,6 +246,9 @@ export default function Root() {
       },
     });
     setIsLoading(false);
+
+    // reload page to get new data
+    window.location.reload();
   };
 
   return (
