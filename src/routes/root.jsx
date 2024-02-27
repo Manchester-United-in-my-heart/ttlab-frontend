@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 
 export default function Root() {
   const host = import.meta.env.VITE_HOST || 'https://nest-mongo-gold.vercel.app';
-  console.log(host);
+  // console.log(host);
   const { isLoading, setIsLoading } = useContext(LoadingContext);
   // send token named 'token' to server for authentication. If return 401, redirect to login page.
 
@@ -40,7 +40,6 @@ export default function Root() {
       },
     })
       .then((res) => {
-        console.log(res.status);
         if (res.status === 401) {
           window.location.href = '/login';
         }
@@ -73,7 +72,6 @@ export default function Root() {
       },
     })
       .then((res) => {
-        console.log(res.status);
         if (res.status === 401) {
           window.location.href = '/login';
         }
@@ -90,7 +88,6 @@ export default function Root() {
             description: product.description,
             image: product.imageUrl,
           });
-          console.log(productList);
           setDummyProductList(productList);
           setFilteredProductList(productList);
         });
@@ -147,7 +144,6 @@ export default function Root() {
   };
 
   const onModifyProduct = async (product) => {
-    console.log(product);
     const index = dummyProductList.findIndex((p) => p.id === product.id);
     const newProductList = [...dummyProductList];
     newProductList[index] = product;
@@ -193,7 +189,6 @@ export default function Root() {
   };
 
   const onModifyUser = async (user) => {
-    console.log(user);
     const index = dummyUserList.findIndex((u) => u.id === user.id);
     const newUserList = [...dummyUserList];
     newUserList[index] = user;
