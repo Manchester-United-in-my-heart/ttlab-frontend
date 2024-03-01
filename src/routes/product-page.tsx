@@ -10,5 +10,5 @@ type ProductPageProps = {
 };
 export default function ProductPage(props: ProductPageProps) {
   const { productList, onModifyProduct,  onDeleteProduct, onCreatedProduct, isProductModalOpen, setIsProductModalOpen } = props;
-  return <ProductList products={productList} onModifyProduct={onModifyProduct} onDeleteProduct={onDeleteProduct} isProductModalOpen={isProductModalOpen} setIsProductModalOpen={setIsProductModalOpen} onCreatedProduct={onCreatedProduct} />;
+  return <ProductList products={productList} onModifyProduct={onModifyProduct} onDeleteProduct={onDeleteProduct} isProductModalOpen={isProductModalOpen} setIsProductModalOpen={setIsProductModalOpen} onCreateProduct={onCreatedProduct} />;
 }

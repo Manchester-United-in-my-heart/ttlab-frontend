@@ -11,6 +11,7 @@ type ProductModalProps = {
 const ProductModal = (props: ProductModalProps) => {
   const product = props.product?props.product:null;
   const onClose = props.onClose;
+  const onCreate = props.onCreate;
   const onModify = props.onModify;
   const [name, setName] = useState(product?.name || '');
   const [price, setPrice] = useState(product?.price || '');
@@ -116,7 +117,8 @@ const ProductModal = (props: ProductModalProps) => {
           type={'button'}
           onClick={() => {
             const product = getProduct();
-            props.onCreate(product);
+            console.log(product);
+            onCreate(product);
             onClose();
           }}
           className="px-4 py-2 text-blue-600 border border-blue-600 rounded hover:bg-blue-600 hover:text-white"

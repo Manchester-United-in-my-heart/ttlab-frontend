@@ -98,12 +98,9 @@ export default function Root() {
   }, []);
 
   const onCreateUser = async (user) => {
-    // const newUserList = [...dummyUserList, user];
-    // setDummyUserList(newUserList);
-    // setFilteredUserList(newUserList);
-
+    setIsLoading(true);
     // send data to server
-    await fetch(`${host}/users`, {
+    const res = await fetch(`${host}/users`, {
       body: JSON.stringify({
         name: user.name,
         email: user.email,
@@ -118,18 +115,30 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
-    
-    // reload page to get new data
-    window.location.reload();
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+      console.log(err);
+    }
   };
 
   const onCreateProduct = async (product) => {
-    // const newProductList = [...dummyProductList, product];
-    // setDummyProductList(newProductList);
-    // setFilteredProductList(newProductList);
+    setIsLoading(true);
 
     // send data to server
-    await fetch(`${host}/products`, {
+    const res = await fetch(`${host}/products`, {
       body: JSON.stringify({
         name: product.name,
         price: product.price,
@@ -144,21 +153,30 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
 
-    // reload page to get new data
-    window.location.reload();
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+
+      console.log(err);
+    }
   };
 
   const onModifyProduct = async (product) => {
-    // const index = dummyProductList.findIndex((p) => p.id === product.id);
-    // const newProductList = [...dummyProductList];
-    // newProductList[index] = product;
-    // setDummyProductList(newProductList);
-    // setFilteredProductList(newProductList);
-
     setIsLoading(true);
-    // send data to server
-    await fetch(`${host}/products/${product.id}`, {
+    const res = await fetch(`${host}/products/${product.id}`, {
       body: JSON.stringify({
         name: product.name,
         price: product.price,
@@ -173,20 +191,31 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
-    setIsLoading(false);
-    
-    // reload page to get new data
-    window.location.reload();
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
+
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+
+      console.log(err);
+    }
   };
 
   const onDeleteProduct = async (product) => {
-    // const newProductList = dummyProductList.filter((p) => p.id !== product.id);
-    // setDummyProductList(newProductList);
-    // setFilteredProductList(newProductList);
-
     // // send data to server
     setIsLoading(true);
-    await fetch(`${host}/products/${product.id}`, {
+    const res = await fetch(`${host}/products/${product.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -194,22 +223,31 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
-    setIsLoading(false);
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
 
-    // reload page to get new data
-    window.location.reload();
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+
+      console.log(err);
+    }
   };
 
   const onModifyUser = async (user) => {
-    const index = dummyUserList.findIndex((u) => u.id === user.id);
-    const newUserList = [...dummyUserList];
-    newUserList[index] = user;
-    setDummyUserList(newUserList);
-    setFilteredUserList(newUserList);
-
     setIsLoading(true);
     // send data to server
-    await fetch(`${host}/users/${user.id}`, {
+    const res = await fetch(`${host}/users/${user.id}`, {
       body: JSON.stringify({
         name: user.name,
         email: user.email,
@@ -224,20 +262,32 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
-    setIsLoading(false);
 
-    // reload page to get new data
-    window.location.reload();
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
+
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+
+      console.log(err);
+    }
   };
 
   const onDeleteUser = async (user) => {
-    // const newUserList = dummyUserList.filter((u) => u.id !== user.id);
-    // setDummyUserList(newUserList);
-    // setFilteredUserList(newUserList);
-
     // // send data to server
     setIsLoading(true);
-    await fetch(`${host}/users/${user.id}`, {
+    const res = await fetch(`${host}/users/${user.id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -245,10 +295,25 @@ export default function Root() {
         'Access-Control-Allow-Origin': '*',
       },
     });
-    setIsLoading(false);
 
-    // reload page to get new data
-    window.location.reload();
+    try {
+      if (res.status === 401) {
+        window.location.href = '/login';
+      }
+
+      const data = await res.json();
+      if (data.errors?.length > 0) {
+        setIsLoading(false);
+        alert(data.errors.join('\n'));
+      } else {
+        setIsLoading(false);
+        window.location.reload();
+      }
+    } catch (err) {
+      alert('Error');
+      setIsLoading(false);
+      console.log(err);
+    }
   };
 
   return (
