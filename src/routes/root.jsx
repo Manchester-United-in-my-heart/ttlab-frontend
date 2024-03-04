@@ -102,11 +102,11 @@ export default function Root() {
     // send data to server
     const res = await fetch(`${host}/users`, {
       body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        dateOfBirth: user.DOB,
-        phone: user.phone,
-        avatarUrl: user.avatar,
+        name: user.name || '',
+        email: user.email || '',
+        dateOfBirth: user.DOB || '',
+        phone: user.phone || '',
+        avatarUrl: user.avatar  || '',
       }),
       method: 'POST',
       headers: {
@@ -140,11 +140,11 @@ export default function Root() {
     // send data to server
     const res = await fetch(`${host}/products`, {
       body: JSON.stringify({
-        name: product.name,
-        price: product.price,
-        quantity: product.quantity,
-        description: product.description,
-        imageUrl: product.image,
+        name: product.name || '',
+        price: product.price || '',
+        quantity: product.quantity || '',
+        description: product.description || '',
+        imageUrl: product.image || '',
       }),
       method: 'POST',
       headers: {
@@ -178,11 +178,11 @@ export default function Root() {
     setIsLoading(true);
     const res = await fetch(`${host}/products/${product.id}`, {
       body: JSON.stringify({
-        name: product.name,
-        price: product.price,
-        quantity: product.quantity,
-        description: product.description,
-        imageUrl: product.image,
+        name: product.name || '',
+        price: product.price || '',
+        quantity: product.quantity || '',
+        description: product.description || '',
+        imageUrl: product.image || '',
       }),
       method: 'PATCH',
       headers: {
@@ -249,11 +249,11 @@ export default function Root() {
     // send data to server
     const res = await fetch(`${host}/users/${user.id}`, {
       body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        dateOfBirth: user.DOB,
-        phone: user.phone,
-        avatarUrl: user.avatar,
+        name: user.name || '',
+        email: user.email || '',
+        dateOfBirth: user.DOB || '',
+        phone: user.phone || '',
+        avatarUrl: user.avatar || '',
       }),
       method: 'PATCH',
       headers: {
