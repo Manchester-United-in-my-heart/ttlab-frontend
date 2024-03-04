@@ -61,7 +61,16 @@ export default function ProductList(props: ProductListProps) {
         props.isProductModalOpen && (
           <div className="absolute top-0 left-0 w-screen h-screen bg-[#342b2b53] z-10 flex items-center justify-center">
             <div className="mx-auto my-auto">
-              <ProductModal product={selectedProduct} isOpen={props.isProductModalOpen} onClose={() => props.setIsProductModalOpen(false)} onCreate={props.onCreateProduct} onModify={onModifyProduct} />
+              <ProductModal
+                product={selectedProduct}
+                isOpen={props.isProductModalOpen}
+                onClose={() => {
+                  props.setIsProductModalOpen(false);
+                  setSelectedProduct(undefined);
+                }}
+                onCreate={props.onCreateProduct}
+                onModify={onModifyProduct}
+              />
             </div>
           </div>
         )
