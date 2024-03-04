@@ -6,10 +6,9 @@ import { DummyActiveUser, numberOfNotifications } from '../data/data.ts';
 import LoadingModal from '../modals/LoadingModal.tsx';
 import { LoadingContext } from '../storage/LoadingContext.tsx';
 import { Helmet } from 'react-helmet';
+import { getUsers, createUser, modifyUser, deleteUser, getProducts, createProduct, modifyProduct, deleteProduct } from '../api/api.ts';
 
 export default function Root() {
-  const host = import.meta.env.VITE_HOST || 'https://nest-mongo-gold.vercel.app';
-  // console.log(host);
   const { isLoading, setIsLoading } = useContext(LoadingContext);
   // send token named 'token' to server for authentication. If return 401, redirect to login page.
 
@@ -32,89 +31,62 @@ export default function Root() {
 
   // Fetch Data from server
   useEffect(() => {
-    fetch(`${host}/users`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
+    const fetchUsers = async () => {
+      try {
+        const res = await getUsers();
         if (res.status === 401) {
           window.location.href = '/login';
         }
-        return res.json();
-      })
-      .then((data) => {
-        const userList = [];
-        data.forEach((user) => {
-          userList.push({
-            id: user._id,
-            avatar: user.avatarUrl,
-            name: user.name,
-            email: user.email,
-            DOB: user.dateOfBirth,
-            phone: user.phone,
-          });
-          setDummyUserList(userList);
-          setFilteredUserList(userList);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
 
-    fetch(`${host}/products`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
+        const data = await res.json();
+        const userList = data.map((user) => ({
+          id: user._id,
+          avatar: user.avatarUrl,
+          name: user.name,
+          email: user.email,
+          DOB: user.dateOfBirth,
+          phone: user.phone,
+        }));
+
+        setDummyUserList(userList);
+        setFilteredUserList(userList);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const res = await getProducts();
         if (res.status === 401) {
           window.location.href = '/login';
         }
-        return res.json();
-      })
-      .then((data) => {
-        const productList = [];
-        data.forEach((product) => {
-          productList.push({
-            id: product._id,
-            name: product.name,
-            price: product.price,
-            quantity: product.quantity,
-            description: product.description,
-            image: product.imageUrl,
-          });
-          setDummyProductList(productList);
-          setFilteredProductList(productList);
-        });
-      })
-      .catch((err) => {
+
+        const data = await res.json();
+        const productList = data.map((product) => ({
+          id: product._id,
+          name: product.name,
+          price: product.price,
+          quantity: product.quantity,
+          description: product.description,
+          image: product.imageUrl,
+        }));
+
+        setDummyProductList(productList);
+        setFilteredProductList(productList);
+      } catch (err) {
         console.log(err);
-      });
+      }
+    };
+
+    fetchUsers();
+    fetchProducts();
   }, []);
 
   const onCreateUser = async (user) => {
     setIsLoading(true);
     // send data to server
-    const res = await fetch(`${host}/users`, {
-      body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        dateOfBirth: user.DOB,
-        phone: user.phone,
-        avatarUrl: user.avatar,
-      }),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    const res = await createUser(user);
     try {
       if (res.status === 401) {
         window.location.href = '/login';
@@ -138,21 +110,7 @@ export default function Root() {
     setIsLoading(true);
 
     // send data to server
-    const res = await fetch(`${host}/products`, {
-      body: JSON.stringify({
-        name: product.name,
-        price: product.price,
-        quantity: product.quantity,
-        description: product.description,
-        imageUrl: product.image,
-      }),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    const res = await createProduct(product);
     try {
       if (res.status === 401) {
         window.location.href = '/login';
@@ -176,21 +134,7 @@ export default function Root() {
 
   const onModifyProduct = async (product) => {
     setIsLoading(true);
-    const res = await fetch(`${host}/products/${product.id}`, {
-      body: JSON.stringify({
-        name: product.name,
-        price: product.price,
-        quantity: product.quantity,
-        description: product.description,
-        imageUrl: product.image,
-      }),
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    const res = await modifyProduct(product);
     try {
       if (res.status === 401) {
         window.location.href = '/login';
@@ -215,14 +159,7 @@ export default function Root() {
   const onDeleteProduct = async (product) => {
     // // send data to server
     setIsLoading(true);
-    const res = await fetch(`${host}/products/${product.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    const res = await deleteProduct(product);
     try {
       if (res.status === 401) {
         window.location.href = '/login';
@@ -247,21 +184,7 @@ export default function Root() {
   const onModifyUser = async (user) => {
     setIsLoading(true);
     // send data to server
-    const res = await fetch(`${host}/users/${user.id}`, {
-      body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        dateOfBirth: user.DOB,
-        phone: user.phone,
-        avatarUrl: user.avatar,
-      }),
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+    const res = await modifyUser(user);
 
     try {
       if (res.status === 401) {
@@ -287,14 +210,8 @@ export default function Root() {
   const onDeleteUser = async (user) => {
     // // send data to server
     setIsLoading(true);
-    const res = await fetch(`${host}/users/${user.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-        'Access-Control-Allow-Origin': '*',
-      },
-    });
+
+    const res = await deleteUser(user);
 
     try {
       if (res.status === 401) {

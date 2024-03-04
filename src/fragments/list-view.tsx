@@ -67,7 +67,7 @@ export default function ListView(props: ListViewProps) {
       {isProductModalOpen && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-[#342b2b53] z-10 flex items-center justify-center">
           <div className="mx-auto my-auto">
-            <ProductModal isOpen={isProductModalOpen} onClose={() => setIsProductModalOpen(false)} onCreate={onCreateProduct} onModify={onModifyProduct} />
+            <ProductModal isOpen={isProductModalOpen} onClose={() => {setIsProductModalOpen(false)}} onCreate={onCreateProduct} onModify={onModifyProduct} />
           </div>
         </div>
       )}

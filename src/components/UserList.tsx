@@ -41,9 +41,9 @@ export default function UserList(props: UserListProps) {
   for (let i = 0; i < pages; i++) {
     dummyUserListByPage.push(users.slice(i * numberOfUserPerPage, (i + 1) * numberOfUserPerPage));
   }
-  
+
   const [userListByPage, setUserListByPage] = useState<any[]>([]);
-  
+
   useEffect(() => {
     setCurrentPage(0);
     setUserListByPage(dummyUserListByPage);
@@ -67,7 +67,16 @@ export default function UserList(props: UserListProps) {
       {isUserModalOpen && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-[#342b2b53] z-10 flex items-center justify-center">
           <div className="mx-auto my-auto">
-            <UserModal user={selectedUser} isOpen={isUserModalOpen} onClose={() => setIsUserModalOpen(false)} onCreate={onCreateUser} onModify={onModifyUser} />
+            <UserModal
+              user={selectedUser}
+              isOpen={isUserModalOpen}
+              onClose={() => {
+                setIsUserModalOpen(false);
+                setSelectedUser(undefined);
+              }}
+              onCreate={onCreateUser}
+              onModify={onModifyUser}
+            />
           </div>
         </div>
       )}
