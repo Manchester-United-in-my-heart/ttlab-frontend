@@ -1,84 +1,33 @@
 import { FaEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { IsLogin, refresh, login } from '../api/api';
 
 export default function Login() {
-  const host = import.meta.env.VITE_HOST || 'https://nest-mongo-gold.vercel.app';
+  const host = import.meta.env.VITE_HOST;
   console.log(host);
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    fetch(`${host}/users`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }).then((res) => {
-      console.log(res.status);
-      if (res.status !== 401) {
-        window.location.href = '/';
-      } else {
-        const refreshToken = localStorage.getItem('refreshToken');
-        fetch(`${host}/auth/refresh-token`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ refreshToken }),
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            if (data.access_token && data.refresh_token) {
-              const accessToken = data.access_token;
-              const refreshToken = data.refresh_token;
-              localStorage.setItem('accessToken', accessToken);
-              localStorage.setItem('refreshToken', refreshToken);
-              window.location.href = '/';
-            } else {
-              console.log('error');
-            }
-          });
+    const tryToFetch = async () => {
+      try {
+        const isLogin = await IsLogin();
+        if (isLogin) {
+          window.location.href = '/';
+        } else {
+          await refresh();
+        }
+      } catch (e) {
+        console.log(e);
       }
-    });
-  });
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   if (accessToken) {
-  //     window.location.href = '/';
-  //   }
-  // }, []);
+    };
+
+    tryToFetch();
+  }, []);
 
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const loginHandler = async () => {
-    try {
-      console.log(username, password);
-      const res = await fetch(`${host}/auth/signin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // CORS
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH, HEAD, OPTIONS',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await res.json();
-      if (data.access_token && data.refresh_token) {
-        const accessToken = data.access_token;
-        const refreshToken = data.refresh_token;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        window.location.href = '/';
-      } else {
-        console.log('error');
-      }
-    } catch (error) {
-      console.log('error');
-    }
+    await login(username, password);
   };
   return (
     <div className="w-full my-auto mx-auto">
