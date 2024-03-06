@@ -6,7 +6,7 @@ import { DummyActiveUser, numberOfNotifications } from '../data/data.ts';
 import LoadingModal from '../modals/LoadingModal.tsx';
 import { LoadingContext } from '../storage/LoadingContext.tsx';
 import { Helmet } from 'react-helmet';
-import { getUsers, createUser, modifyUser, deleteUser, getProducts, createProduct, modifyProduct, deleteProduct } from '../api/api.ts';
+import { getUsers, createUser, modifyUser, deleteUser, getProducts, createProduct, modifyProduct, deleteProduct, getProfile } from '../api/api.ts';
 
 export default function Root() {
   const { isLoading, setIsLoading } = useContext(LoadingContext);
@@ -28,11 +28,19 @@ export default function Root() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [dummyUserList, setDummyUserList] = useState([]);
   const [dummyProductList, setDummyProductList] = useState([]);
+  const [userProfile, setUserProfile] = useState({});
 
   // Fetch Data from server
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        const userProfile = await (await getProfile()).json();
+        setUserProfile({
+          userName: userProfile.username,
+          userEmail: userProfile.email,
+          userAvatar: userProfile.image,
+        });
+
         const res = await getUsers();
         if (res.status === 401) {
           window.location.href = '/login';
@@ -78,7 +86,6 @@ export default function Root() {
         console.log(err);
       }
     };
-
     fetchUsers();
     fetchProducts();
   }, []);
@@ -202,7 +209,6 @@ export default function Root() {
     } catch (err) {
       alert('Error');
       setIsLoading(false);
-
       console.log(err);
     }
   };
@@ -245,6 +251,7 @@ export default function Root() {
         <div className={`relative w-full h-full bg-[#F1F2F6] ${isSideBarOpen ? 'grid grid-flow-col grid-cols-[1fr_7fr] gap-[10px]' : 'flex gap-[10px]'} overflow-x-hidden`}>
           <SideBar view={view} setView={setView} isOpen={isSideBarOpen} setIsOpen={setIsSideBarOpen} />
           <ListView
+            {...userProfile}
             isSideBarOpen={isSideBarOpen}
             setIsSideBarOpen={setIsSideBarOpen}
             dummyActiveUser={DummyActiveUser}

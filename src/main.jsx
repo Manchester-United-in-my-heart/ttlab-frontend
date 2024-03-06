@@ -6,6 +6,7 @@ import Login from './routes/login';
 // import Test from './routes/test';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoadingProvider } from './storage/LoadingContext';
+// import App from './App';
 import './index.css';
 
 const router = createBrowserRouter([

@@ -11,12 +11,10 @@ import ProductModal from '../modals/ProductModal.tsx';
 type ListViewProps = {
   isSideBarOpen: boolean;
   setIsSideBarOpen: (isSideBarOpen: boolean) => void;
-  dummyActiveUser: {
-    userName: string;
-    userEmail: string;
-    userAvatar: string;
-    userState: 'online' | 'offline';
-  };
+  userName: string;
+  userEmail: string;
+  userAvatar: string;
+  // userState: 'online' | 'offline';
   numberOfNotifications: number;
   dummyUsers: User[];
   dummyProducts: Product[];
@@ -52,7 +50,8 @@ export default function ListView(props: ListViewProps) {
     USER: 'USER',
     PRODUCT: 'PRODUCT',
   };
-  const { isSideBarOpen, dummyActiveUser, numberOfNotifications, dummyUsers, dummyProducts, view, filteredUsers, setFilteredUsers, filteredProducts, setFilteredProducts, isUserModalOpen, setIsUserModalOpen, isProductModalOpen, setIsProductModalOpen, searchUser, searchProduct, onModifyProduct, onDeleteProduct, onCreateProduct, onCreateUser, onDeleteUser, onModifyUser } = props;
+  const { isSideBarOpen, userName, userEmail, userAvatar, numberOfNotifications, dummyUsers, dummyProducts, view, filteredUsers, setFilteredUsers, filteredProducts, setFilteredProducts, isUserModalOpen, setIsUserModalOpen, isProductModalOpen, setIsProductModalOpen, searchUser, searchProduct, onModifyProduct, onDeleteProduct, onCreateProduct, onCreateUser, onDeleteUser, onModifyUser } = props;
+  const userState = 'online';
   return (
     <div className={`${!isSideBarOpen && 'w-full'} ml-[10px] mr-[10px] pt-[10px]`}>
       {/* User Modal */}
@@ -67,7 +66,14 @@ export default function ListView(props: ListViewProps) {
       {isProductModalOpen && (
         <div className="absolute top-0 left-0 w-screen h-screen bg-[#342b2b53] z-10 flex items-center justify-center">
           <div className="mx-auto my-auto">
-            <ProductModal isOpen={isProductModalOpen} onClose={() => {setIsProductModalOpen(false)}} onCreate={onCreateProduct} onModify={onModifyProduct} />
+            <ProductModal
+              isOpen={isProductModalOpen}
+              onClose={() => {
+                setIsProductModalOpen(false);
+              }}
+              onCreate={onCreateProduct}
+              onModify={onModifyProduct}
+            />
           </div>
         </div>
       )}
@@ -75,7 +81,7 @@ export default function ListView(props: ListViewProps) {
         <div className={`font-semibold`}>{view === View.PRODUCT ? `Danh sách sản phẩm` : view === View.USER && `Danh sách người dùng`} </div>
         <div className="flex gap-[15px]">
           <NotificationBell numberOfNotifications={numberOfNotifications} />
-          <Badge userName={dummyActiveUser.userName} userEmail={dummyActiveUser.userEmail} userAvatar={dummyActiveUser.userAvatar} userState={dummyActiveUser.userState} />
+          <Badge userName={userName} userEmail={userEmail} userAvatar={userAvatar} userState={userState} />
         </div>
       </div>
       <div className="flex justify-between mt-[20px] mb-[10px]">
