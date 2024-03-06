@@ -43,7 +43,7 @@ export const login = async (username: string, password: string) => {
       localStorage.setItem('refreshToken', refreshToken);
       window.location.href = '/';
     } else {
-      alert(data.message  );
+      alert(data.message);
     }
   } catch (e) {
     console.log(e);
@@ -75,6 +75,16 @@ export const refresh = async () => {
   } catch (e) {
     console.log(e);
   }
+};
+
+export const getProfile = async () => {
+  redirectToLoginIfTokenNotExist();
+  return await fetch(`${host}/auth/profile`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Access-Control-Allow-Origin': '*',
+    },
+  });
 };
 
 export const getUsers = async () => {

@@ -2,10 +2,9 @@ import { FaEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { IsLogin, refresh, login } from '../api/api';
+import GoogleAuthButton from '../components/GoogleAuthButton';
 
 export default function Login() {
-  const host = import.meta.env.VITE_HOST;
-  console.log(host);
   useEffect(() => {
     const tryToFetch = async () => {
       try {
@@ -126,6 +125,8 @@ export default function Login() {
           >
             Đăng nhập
           </button>
+          <div>hoặc</div>
+          <GoogleAuthButton />
         </form>
         <div className="flex justify-center mt-[32px] gap-2">
           Bạn chưa có tài khoản?
