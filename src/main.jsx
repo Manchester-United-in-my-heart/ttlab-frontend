@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import Root from './routes/root';
 import ErrorPage from './routes/error-page';
 import Login from './routes/login';
+import SignUp from './routes/signup-page';
+import MFAAuthentication from './routes/verfication-page';
 // import Test from './routes/test';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoadingProvider } from './storage/LoadingContext';
@@ -19,10 +21,14 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
   },
-  // {
-  //   path: '/test',
-  //   element: <Test />,
-  // },
+  {
+    path: '/signup',
+    element: <SignUp />,
+  },
+  {
+    path: '/verify-mfa',
+    element: <MFAAuthentication />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
