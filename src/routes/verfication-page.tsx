@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { verifyMFA } from '../api/api';
 
 const MFAAuthentication = () => {
   const [token, setToken] = useState('');
@@ -12,31 +13,8 @@ const MFAAuthentication = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Here you would typically send the token to your server for verification
-    const res = await fetch('http://localhost:3000/auth/verify-otp', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: searchParams.get('email'),
-        password: searchParams.get('password'),
-        token: token,
-      }),
-    });
-    const data = await res.json();
-
-    if (data.access_token && data.refresh_token) {
-      const accessToken = data.access_token;
-      const refreshToken = data.refresh_token;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      window.location.href = '/';
-    } else {
-      alert(data.message);
-    }
+    await verifyMFA(token, searchParams.get('email') || '', searchParams.get('password') || '');
   };
-  //print query url
-  console.log(searchParams);
 
   return (
     <div className="w-full flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">

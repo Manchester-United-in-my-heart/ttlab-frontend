@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { signup } from '../api/api';
 
 export default function Signup() {
-  const host = import.meta.env.VITE_HOST;
   const [userEmail, setUserEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -16,28 +16,18 @@ export default function Signup() {
       return;
     }
     try {
-      const res = await fetch(`${host}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          username: username,
-          password: password,
-          mfa: enableMFA,
-          image: avatarLink, // new avatar link
-        }),
-      });
+      const res = await signup(userEmail, username, password, enableMFA, avatarLink);
       const data = await res.json();
-      console.log(data);
       if (!res.ok) {
         alert(data.error);
       } else {
         alert('User created successfully');
-        document.getElementById('submit-button').innerHTML = '<div></div>';
-        document.getElementById('qr-area').innerHTML = `<div style='display: flex; flex-direction: column; justify-content:center; align-items: center'><div>1. Quét QR sau ${data.QRCodeImageURL}</div><div>2. Trở về trang <a href='/login'> đăng nhập </a></div></div>`;
-        // window.location.href = '/login';
+        const submitButton = document.getElementById('submit-button');
+        const qrArea = document.getElementById('qr-area');
+        if (submitButton && qrArea) {
+          submitButton.innerHTML = '<div></div>';
+          qrArea.innerHTML = `<div style='display: flex; flex-direction: column; justify-content:center; align-items: center'><div>1. Quét QR sau ${data.QRCodeImageURL}</div><div>2. Trở về trang <a href='/login'> đăng nhập </a></div></div>`;
+        }
       }
     } catch (error) {
       console.log(error);

@@ -21,6 +21,23 @@ export const IsLogin = async () => {
   return true;
 };
 
+export const signup = async (email: string, username: string, password: string, mfa: boolean, image: string) => {
+  const res = await fetch(`${host}/auth/signup`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: email,
+      username: username,
+      password: password,
+      mfa: mfa,
+      image: image, // new avatar link
+    }),
+  });
+  return res;
+};
+
 export const login = async (username: string, password: string) => {
   try {
     const res = await fetch(`${host}/auth/signin`, {
@@ -48,6 +65,31 @@ export const login = async (username: string, password: string) => {
     }
   } catch (e) {
     console.log(e);
+  }
+};
+
+export const verifyMFA = async (token: string, email: string, password: string) => {
+  const res = await fetch(`${host}/auth/verify-otp`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+      token: token,
+    }),
+  });
+  const data = await res.json();
+
+  if (data.access_token && data.refresh_token) {
+    const accessToken = data.access_token;
+    const refreshToken = data.refresh_token;
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    window.location.href = '/';
+  } else {
+    alert(data.message);
   }
 };
 
