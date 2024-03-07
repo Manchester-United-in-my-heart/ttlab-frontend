@@ -33,7 +33,6 @@ export const login = async (username: string, password: string) => {
       },
       body: JSON.stringify({ username, password }),
     });
-    console.log(res);
     const data = await res.json();
     console.log(data);
     if (data.access_token && data.refresh_token) {
@@ -42,6 +41,8 @@ export const login = async (username: string, password: string) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       window.location.href = '/';
+    } else if (data.mfa) {
+      window.location.href = `/verify-mfa?email=${data.email}&password=${data.password}`;
     } else {
       alert(data.message);
     }

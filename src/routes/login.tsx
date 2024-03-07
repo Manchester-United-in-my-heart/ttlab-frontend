@@ -131,7 +131,7 @@ export default function Login() {
         <div className="flex justify-center mt-[32px] gap-2">
           Bạn chưa có tài khoản?
           <span>
-            <a className=" font-semibold text-[#0F60FF]" href="#">
+            <a className=" font-semibold text-[#0F60FF]" href="/signup">
               Đăng ký
             </a>
           </span>
